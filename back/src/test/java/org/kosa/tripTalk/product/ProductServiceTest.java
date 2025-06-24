@@ -168,6 +168,37 @@ class ProductServiceTest {
         assertThat(updated.getDiscountedPrice()).isEqualTo(120000);
         assertThat(updated.getDiscount().getName()).isEqualTo("20% 여름 할인");
     }
+    
+    @Test
+    @DisplayName("상품 목록 조회 시 할인 정보가 포함된다")
+    void getAllProducts_includesDiscountInfo() {
+        // given
+        DiscountDTO discount = createDiscountDTO(DiscountType.RATE, 0, 0.1, "10% 할인", 5);
+
+        ProductRequestDTO request = createProductRequest(
+            "서울 여행", "할인 있는 상품", 100000,
+            LocalDateTime.now().plusDays(3), LocalDateTime.now().plusDays(5)
+        ).toBuilder().discount(discount).build();
+
+        productService.create(request);
+
+        PageRequestDTO pageRequestDTO = new PageRequestDTO(1, 10, "price,asc");
+        Pageable pageable = pageRequestDTO.toPageable();
+        Search search = new Search(); // 전체 검색
+
+        // when
+        Page<ProductResponseDTO> result = productService.getAllProducts(pageable, search);
+
+        // then
+        assertThat(result.getContent()).hasSize(1);
+        ProductResponseDTO dto = result.getContent().get(0);
+
+        assertThat(dto.getTitle()).isEqualTo("서울 여행");
+        assertThat(dto.getDiscount()).isNotNull();
+        assertThat(dto.getDiscount().getDiscountType()).isEqualTo(DiscountType.RATE);
+        assertThat(dto.getDiscount().getName()).isEqualTo("10% 할인");
+        assertThat(dto.getDiscountedPrice()).isEqualTo(90000); // 10% 할인
+    }
 
     // ========== 공통 유틸 메서드 ==========
 

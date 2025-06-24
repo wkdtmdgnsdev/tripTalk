@@ -55,6 +55,7 @@ public class ProductService {
 	}
 
 	// 수정
+	@Transactional
 	public Product update(Long id, ProductRequestDTO dto) {
 		Product product = notFoundProductId(id);
 		product.updateFromDTO(dto);

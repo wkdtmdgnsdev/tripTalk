@@ -3,6 +3,7 @@ package org.kosa.tripTalk.product;
 import java.time.LocalDateTime;
 import org.kosa.tripTalk.category.Category;
 import org.kosa.tripTalk.product.discount.Discount;
+import org.kosa.tripTalk.product.discount.DiscountDTO;
 import org.kosa.tripTalk.seller.Seller;
 
 import jakarta.persistence.CascadeType;
@@ -71,6 +72,10 @@ public class Product {
 		this.price = dto.getPrice();
 		this.startDate = dto.getStartDate();
 		this.endDate = dto.getEndDate();
+		
+		Discount discount = DiscountDTO.toEntity(dto.getDiscount());
+		// 할인 적용
+		this.applyDiscount(discount);
 	}
 	
 	// 할인 가격 계산 메소드

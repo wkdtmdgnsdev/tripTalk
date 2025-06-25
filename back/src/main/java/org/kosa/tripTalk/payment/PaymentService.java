@@ -2,7 +2,7 @@ package org.kosa.tripTalk.payment;
 
 import lombok.RequiredArgsConstructor;
 import org.kosa.tripTalk.product.Product;
-import org.kosa.tripTalk.product.ProductRepository;
+import org.kosa.tripTalk.product.repository.ProductRepository;
 import org.kosa.tripTalk.reservation.ReservationRequest;
 import org.kosa.tripTalk.reservation.ReservationService;
 import org.kosa.tripTalk.user.User;

@@ -1,5 +1,6 @@
-package org.kosa.tripTalk.product;
+package org.kosa.tripTalk.product.dto;
 
+import org.kosa.tripTalk.product.Product;
 import org.kosa.tripTalk.product.discount.DiscountDTO;
 
 import lombok.AllArgsConstructor;

@@ -1,8 +1,9 @@
-package org.kosa.tripTalk.product;
+package org.kosa.tripTalk.product.dto;
 
 import java.time.LocalDateTime;
 
 import org.kosa.tripTalk.category.Category;
+import org.kosa.tripTalk.product.Product;
 import org.kosa.tripTalk.product.discount.Discount;
 import org.kosa.tripTalk.product.discount.DiscountDTO;
 import org.kosa.tripTalk.seller.Seller;

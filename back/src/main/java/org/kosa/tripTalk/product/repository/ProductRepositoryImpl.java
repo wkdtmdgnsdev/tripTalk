@@ -1,11 +1,14 @@
-package org.kosa.tripTalk.product;
+package org.kosa.tripTalk.product.repository;
 
 import java.util.List;
 
 import org.kosa.tripTalk.category.QCategory;
 import org.kosa.tripTalk.common.dto.Search;
 import org.kosa.tripTalk.common.querydsl.QuerydslUtils;
+import org.kosa.tripTalk.product.Product;
+import org.kosa.tripTalk.product.QProduct;
 import org.kosa.tripTalk.product.discount.QDiscount;
+import org.kosa.tripTalk.product.dto.ProductResponseDTO;
 import org.kosa.tripTalk.seller.QSeller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

@@ -3,12 +3,18 @@ package org.kosa.tripTalk.itinerarybot;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
 public class ChatRequest {
+//	@JsonIgnore
+//	private Long id;
+	
 	//대화를 요청(보냄) 
 	//: 양방향이기 때문에 List에 메세지를 담아서 보냄
+
 	private List<Message> contents = new ArrayList<>();
 	
 	@Data
@@ -45,32 +51,5 @@ public class ChatRequest {
 		message.getParts().add(part);
 		contents.add(message);
 	}
-	
-	
-	/*
-	 * 단일 대화
-	private List<Content> contents;
-	
-	@Data
-	public static class Content{
-		private List<Part> parts;
-	}
-	
-	@Data
-	public static class Part{
-		private String text;
-	}
-	*/
-		
-	/*
-	 * Open AI 용
-	private String model = "";
-	private List<Message> messages;
-	
-	@Data
-	public static class Message{
-		String role;
-		String content;
-	}
-	*/
+
 }

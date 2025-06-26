@@ -2,6 +2,8 @@ package org.kosa.tripTalk.product;
 
 import org.kosa.tripTalk.common.dto.PageRequestDTO;
 import org.kosa.tripTalk.common.dto.Search;
+import org.kosa.tripTalk.product.dto.ProductRequestDTO;
+import org.kosa.tripTalk.product.dto.ProductResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,9 +36,7 @@ public class ProductController {
 	// 상세
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
-		ProductResponseDTO response = productService.getProductById(id);
-		return ResponseEntity.ok(response);
-		
+		return ResponseEntity.ok(productService.getProductById(id));
 	}
 	
 	// 수정
@@ -44,9 +44,7 @@ public class ProductController {
 	public ResponseEntity<ProductResponseDTO> updateProduct(
 			@PathVariable Long id,
 			@RequestBody ProductRequestDTO requestDTO) {
-		Product updateProduct = productService.update(id, requestDTO);
-		
-		return ResponseEntity.ok(ProductResponseDTO.from(updateProduct));
+		return ResponseEntity.ok(productService.update(id, requestDTO));
 	}
 	
 	// 리스트

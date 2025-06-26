@@ -1,5 +1,6 @@
-package org.kosa.tripTalk.product;
+package org.kosa.tripTalk.product.dto;
 
+import org.kosa.tripTalk.product.Product;
 import org.kosa.tripTalk.product.discount.DiscountDTO;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class ProductResponseDTO {
     private String categoryName;
     private String sellerName;
     private DiscountDTO discount;
+    private int discountedPrice;
     
     // dto 폼
     public static ProductResponseDTO from(Product product) {
@@ -32,6 +34,7 @@ public class ProductResponseDTO {
             .categoryName(product.getCategory().getKind())
             .sellerName(product.getSeller().getUserid())
             .discount(DiscountDTO.from(product.getDiscount()))
+            .discountedPrice(product.getDiscountedPrice())
             .build();
     }
 }

@@ -1,7 +1,8 @@
-package org.kosa.tripTalk.product;
+package org.kosa.tripTalk.product.repository;
 
 import org.kosa.tripTalk.common.dto.Search;
 import org.kosa.tripTalk.common.predicate.PredicateBuilder;
+import org.kosa.tripTalk.product.QProduct;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 

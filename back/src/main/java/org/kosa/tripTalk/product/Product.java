@@ -1,6 +1,7 @@
 package org.kosa.tripTalk.product;
 
 import java.time.LocalDateTime;
+
 import org.kosa.tripTalk.category.Category;
 import org.kosa.tripTalk.product.discount.Discount;
 import org.kosa.tripTalk.seller.Seller;
@@ -63,14 +64,16 @@ public class Product {
 	@Column(nullable = false)
 	private LocalDateTime endDate;
 
-	// 수정DTO
-	public void updateFromDTO(ProductRequestDTO dto) {
-		this.title = dto.getTitle();
-		this.description = dto.getDescription();
-		this.address = dto.getAddress();
-		this.price = dto.getPrice();
-		this.startDate = dto.getStartDate();
-		this.endDate = dto.getEndDate();
+	public void update(String title, String description, String address, int price,
+            LocalDateTime startDate, LocalDateTime endDate, Discount discount) {
+		this.title = title;
+		this.description = description;
+		this.address = address;
+		this.price = price;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		
+		this.applyDiscount(discount);
 	}
 	
 	// 할인 가격 계산 메소드

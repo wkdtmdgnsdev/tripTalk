@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.kosa.tripTalk.exception.NotFoundException;
 import org.kosa.tripTalk.product.Product;
-import org.kosa.tripTalk.product.ProductRepository;
+import org.kosa.tripTalk.product.repository.ProductRepository;
 import org.kosa.tripTalk.user.User;
 import org.kosa.tripTalk.user.UserRepository;
 import org.springframework.stereotype.Service;

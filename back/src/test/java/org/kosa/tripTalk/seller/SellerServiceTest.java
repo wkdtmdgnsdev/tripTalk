@@ -14,7 +14,7 @@ import org.kosa.tripTalk.category.CategoryRepository;
 import org.kosa.tripTalk.payment.Payment;
 import org.kosa.tripTalk.payment.PaymentRepository;
 import org.kosa.tripTalk.product.Product;
-import org.kosa.tripTalk.product.ProductRepository;
+import org.kosa.tripTalk.product.repository.ProductRepository;
 import org.kosa.tripTalk.user.User;
 import org.kosa.tripTalk.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

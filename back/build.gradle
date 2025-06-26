@@ -101,7 +101,7 @@ tasks.register('generateQueryDSL', JavaCompile) {
     description = 'Generate Q classes using QueryDSL'
 
     source = fileTree('src/main/java') {
-        include 'org/kosa/tripTalk/*/**/*.java'
+        include 'org/kosa/tripTalk/**/*.java'
     }
 
     classpath = sourceSets.main.compileClasspath

@@ -7,12 +7,16 @@
     </main>
 
     <Footer />
-
     
   </div>
-  </template>
+
+</template>
+
+
+
 
 <script setup>
+
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
@@ -26,3 +30,4 @@ body {
   background-color: #f9f9f9;
 }
 </style>
+

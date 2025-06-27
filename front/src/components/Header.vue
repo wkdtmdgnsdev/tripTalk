@@ -13,7 +13,7 @@
 
       <!-- 버튼 / 네비게이션 영역 -->
       <nav class="nav-buttons">
-        <router-link to="/boardList" class="nav-btn">여행 게시판</router-link>
+        <router-link to="/board" class="nav-btn">여행 게시판</router-link>
         <router-link to="/register/agree" class="nav-btn">회원가입</router-link>
         <router-link to="/loginForm" class="nav-btn">로그인</router-link>
         <router-link to="/MyPage" class="nav-btn">마이페이지</router-link>

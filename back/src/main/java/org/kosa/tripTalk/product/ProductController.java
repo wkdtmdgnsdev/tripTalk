@@ -55,7 +55,6 @@ public class ProductController {
     		) {
 		Pageable pageable = pageRequestDTO.toPageable();
 		Page<ProductResponseDTO> result = productService.getAllProducts(pageable, search);
-		
         return ResponseEntity.ok(result);
     }
 }

@@ -1,5 +1,7 @@
 package org.kosa.tripTalk.itinerarybot;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,7 @@ public class ChatService {
 	//ObjectMapper : JSON<-> Java 객체 변환 도구 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	
+	private final ChatRepository chatRepository;
 	
 	public ChatRequest chat(ChatRequest request, String userInput) {
 		//사용자가 입력한 내용 ChatRequest객체에 추가
@@ -45,19 +48,45 @@ public class ChatService {
 		
 		//응답 처리 
 		ChatResponse response = responseEntity.getBody();
-		if(response != null && response.getCandidates() != null && !response.getCandidates().isEmpty()) {
+		if(response != null && response.getCandidates() != null && !response.getCandidates().isEmpty()
+				&& response.getCandidates().get(0).getContent() != null
+				&& response.getCandidates().get(0).getContent().getParts() != null) {
+			
 			//응답이 유효하다면, 모델이 생성한 메세지 꺼냄
 			ChatResponse.Candidate candidate = response.getCandidates().get(0);
             ChatResponse.Message modelMessage = candidate.getContent();
 
             StringBuilder modelTextBuilder = new StringBuilder();
-            for (ChatResponse.Part part : modelMessage.getParts()) {
-                modelTextBuilder.append(part.getText());
+            
+            for(ChatResponse.Part part : response.getCandidates().get(0).getContent().getParts()) {
+            	modelTextBuilder.append(part.getText());
             }
             
             //모델의 응답도 저장
             request.addModelMessage(modelTextBuilder.toString());
+            
+            //대화내용 DB에 저장
+            for(ChatRequest.Message message : request.getContents()) {
+            	String role = message.getRole();
+                StringBuilder contentBuilder = new StringBuilder();
+                for (ChatRequest.Part part : message.getParts()) {
+                    contentBuilder.append(part.getText());
+                }
+
+                Chat chat = Chat.builder()
+                        		.role(role)
+                        		.createdAt(LocalDateTime.now())
+                        		//user의 메세지면 usermessage로, modelMessage면 model로 아닐 경우엔 null값으로 저장함
+                        		.userMessage("user".equals(role) ? contentBuilder.toString() : null)
+                        		.modelMessage("model".equals(role) ? contentBuilder.toString() : null)
+                        		.build();
+
+                chatRepository.save(chat);
+            }
+            
 		}
+		
+		System.out.println("확인용 service");
 		
 		return request;
 	

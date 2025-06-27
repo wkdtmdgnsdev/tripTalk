@@ -33,44 +33,17 @@ public class ChatRequest {
 		message.getParts().add(part);
 		contents.add(message);
 	}
-	
-	//model의 대화를 추가함
+		
+	// model의 대화를 추가함
 	public void addModelMessage(String modelText) {
 		Message message = new Message();
 		message.setRole("model");
-		
+
 		Part part = new Part();
 		part.setText(modelText);
-		
+
 		message.getParts().add(part);
 		contents.add(message);
 	}
-	
-	
-	/*
-	 * 단일 대화
-	private List<Content> contents;
-	
-	@Data
-	public static class Content{
-		private List<Part> parts;
-	}
-	
-	@Data
-	public static class Part{
-		private String text;
-	}
-	*/
-		
-	/*
-	 * Open AI 용
-	private String model = "";
-	private List<Message> messages;
-	
-	@Data
-	public static class Message{
-		String role;
-		String content;
-	}
-	*/
+
 }

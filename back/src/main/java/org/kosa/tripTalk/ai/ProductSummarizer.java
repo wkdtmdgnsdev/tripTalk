@@ -18,10 +18,9 @@ import lombok.RequiredArgsConstructor;
 public class ProductSummarizer {
 	
 	private final ReviewService reviewService;
-	
 	private static final int MAX_PRODUCTS = 10;
 	
-	// 상품 정보 요약
+	// 상품(정보), 리뷰 (평점, 키워드) 요약
 	public String summarize(Product product) {
 		List<ReviewResponseDTO> reviews = reviewService.getReviewsByProduct(product.getId());
 		
@@ -42,7 +41,7 @@ public class ProductSummarizer {
         ).trim();
     }
 	
-	// 상위 10개 리스트
+	// 상품마다 상위 10개 키워드 제한
 	public String summarizeList(List<Product> products) {
 		return products.stream()
 				.limit(MAX_PRODUCTS)
@@ -50,7 +49,7 @@ public class ProductSummarizer {
 				.collect(Collectors.joining("\n\n"));
 	}
 	
-	// 리뷰 요약
+	// 리뷰 요약, 평점, 키워드
 	private String summarizeReview(List<ReviewResponseDTO> reviews) {
         if (reviews == null || reviews.isEmpty()) return "후기가 없습니다.";
 
@@ -66,7 +65,7 @@ public class ProductSummarizer {
                 .formatted(avg, String.join(", ", keywords));
     }
 	
-	private List<String> extractKeywordsFromDescription(String description) {
+	public List<String> extractKeywordsFromDescription(String description) {
         if (description == null || description.isBlank()) return List.of("정보 없음");
         return extractTopKeywords(List.of(description), 10);
     }

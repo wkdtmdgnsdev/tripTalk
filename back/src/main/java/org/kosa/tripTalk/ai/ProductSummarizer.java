@@ -50,7 +50,7 @@ public class ProductSummarizer {
 	}
 	
 	// 리뷰 요약, 평점, 키워드
-	private String summarizeReview(List<ReviewResponseDTO> reviews) {
+	String summarizeReview(List<ReviewResponseDTO> reviews) {
         if (reviews == null || reviews.isEmpty()) return "후기가 없습니다.";
 
         List<ReviewResponseDTO> top10 = reviews.stream()

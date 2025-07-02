@@ -2,6 +2,9 @@ package org.kosa.tripTalk.ai;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PromptGenerator {
 	
 	public String generatePrompt(String userInput, List<ProductSummaryDTO> candidates) {

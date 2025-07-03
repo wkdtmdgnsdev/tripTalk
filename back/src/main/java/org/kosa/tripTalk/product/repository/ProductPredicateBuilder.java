@@ -20,6 +20,8 @@ public class ProductPredicateBuilder {
 				case "title" -> PredicateBuilder.applyKeyword(product.title, value);
 				case "description" -> PredicateBuilder.applyKeyword(product.description, value);
 				case "address" -> PredicateBuilder.applyKeyword(product.address, value);
+				case "titleAndDescription" -> product.title.containsIgnoreCase(value)
+                .or(product.description.containsIgnoreCase(value));
 				default -> null;
 		};
 	}

@@ -2,14 +2,12 @@ package org.kosa.tripTalk.product.repository;
 
 import java.util.List;
 
-import org.kosa.tripTalk.category.QCategory;
 import org.kosa.tripTalk.common.dto.Search;
 import org.kosa.tripTalk.common.querydsl.QuerydslUtils;
 import org.kosa.tripTalk.product.Product;
 import org.kosa.tripTalk.product.QProduct;
 import org.kosa.tripTalk.product.discount.QDiscount;
 import org.kosa.tripTalk.product.dto.ProductResponseDTO;
-import org.kosa.tripTalk.seller.QSeller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -61,8 +59,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 						.selectFrom(product)
 						// 연관 엔티티를 지연 로딩하지 않고 즉시 함께 가져옴
 						.leftJoin(product.discount, QDiscount.discount).fetchJoin()
-						.leftJoin(product.category, QCategory.category).fetchJoin()
-						.leftJoin(product.seller, QSeller.seller).fetchJoin()
 						.where(condition)
 						.offset(pageable.getOffset())
 						.limit(pageable.getPageSize())

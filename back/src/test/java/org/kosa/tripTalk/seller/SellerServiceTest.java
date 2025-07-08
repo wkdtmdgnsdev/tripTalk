@@ -75,8 +75,6 @@ class SellerServiceTest {
 	        	    .price(100_000)
 	        	    .startDate(LocalDateTime.now().plusDays(1))
 	        	    .endDate(LocalDateTime.now().plusDays(5))
-	        	    .seller(seller)
-	        	    .category(category)
 	        	    .build());
 
 	        // 결제 성공

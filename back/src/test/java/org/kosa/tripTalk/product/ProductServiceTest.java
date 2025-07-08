@@ -6,11 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kosa.tripTalk.category.Category;
-import org.kosa.tripTalk.category.CategoryRepository;
 import org.kosa.tripTalk.common.dto.PageRequestDTO;
 import org.kosa.tripTalk.common.dto.Search;
 import org.kosa.tripTalk.exception.NotFoundException;
@@ -19,17 +16,15 @@ import org.kosa.tripTalk.product.discount.DiscountType;
 import org.kosa.tripTalk.product.dto.ProductRequestDTO;
 import org.kosa.tripTalk.product.dto.ProductResponseDTO;
 import org.kosa.tripTalk.product.repository.ProductRepository;
-import org.kosa.tripTalk.seller.Seller;
-import org.kosa.tripTalk.seller.SellerRepository;
-import org.kosa.tripTalk.user.User;
-import org.kosa.tripTalk.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+@Sql("/test-schema.sql")
 @DisplayName("상품 테스트")
 @SpringBootTest
 @Transactional
@@ -39,44 +34,7 @@ class ProductServiceTest {
 	@Autowired
 	ProductService productService;
 	@Autowired
-	UserRepository userRepository;
-	@Autowired
-	SellerRepository sellerRepository;
-	@Autowired
-	CategoryRepository categoryRepository;
-	@Autowired
 	ProductRepository productRepository;
-	
-	private User savedUser;
-    private Seller savedSeller;
-    private Category savedCategory;
-
-    @BeforeEach
-    void setup() {
-        savedUser = userRepository.save(User.builder()
-                .userId("user123")
-                .name("홍길동")
-                .email("user@test.com")
-                .password("1234")
-                .nickname("길동이")
-                .role(User.Role.SELLER)
-                .phone("010-1234-5678")
-                .build());
-
-        savedSeller = sellerRepository.save(Seller.builder()
-                .user(savedUser)
-                .userid(savedUser.getUserId())
-                .businessNumber("111-22-33333")
-                .businessName("길동상점")
-                .contact("070-1234-5678")
-                .build());
-
-        savedCategory = categoryRepository.save(Category.builder()
-                .kind("여행")
-                .description("여행 카테고리")
-                .iconUrl("https://example.com/default.png")
-                .build());
-    }
 
     @Test
     @DisplayName("정상 상품 등록")
@@ -213,8 +171,6 @@ class ProductServiceTest {
                 .price(price)
                 .startDate(start)
                 .endDate(end)
-                .sellerId(savedUser.getId())
-                .categoryId(savedCategory.getId())
                 .build();
     }
 
@@ -226,8 +182,6 @@ class ProductServiceTest {
                 .price(price)
                 .startDate(LocalDateTime.now().plusDays(1))
                 .endDate(LocalDateTime.now().plusDays(3))
-                .category(savedCategory)
-                .seller(savedSeller)
                 .build());
     }
 

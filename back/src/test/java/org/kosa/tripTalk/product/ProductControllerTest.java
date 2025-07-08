@@ -43,8 +43,6 @@ class ProductControllerTest {
 		        .price(10000)
 		        .startDate(LocalDateTime.of(2025, 7, 1, 10, 0))
 		        .endDate(LocalDateTime.of(2025, 7, 10, 10, 0))
-		        .sellerId(1L)
-		        .categoryId(1L)
 		        .build();
 
         mockMvc.perform(post("/api/product")
@@ -63,8 +61,6 @@ class ProductControllerTest {
 		        .description("설명입니다")
 		        .price(0) // 실패 테스트용
 		        .address("서울")
-		        .sellerId(1L)
-		        .categoryId(1L)
 		        .startDate(LocalDateTime.of(2025, 7, 1, 0, 0))
 		        .endDate(LocalDateTime.of(2025, 7, 10, 0, 0))
 		        .build();

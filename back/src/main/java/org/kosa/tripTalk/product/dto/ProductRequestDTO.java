@@ -2,11 +2,9 @@ package org.kosa.tripTalk.product.dto;
 
 import java.time.LocalDateTime;
 
-import org.kosa.tripTalk.category.Category;
 import org.kosa.tripTalk.product.Product;
 import org.kosa.tripTalk.product.discount.Discount;
 import org.kosa.tripTalk.product.discount.DiscountDTO;
-import org.kosa.tripTalk.seller.Seller;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -41,17 +39,11 @@ public class ProductRequestDTO {
 
     @NotNull(message = "종료일은 필수입니다.")
     private LocalDateTime endDate;
-
-    @NotNull(message = "판매자 ID는 필수입니다.")
-    private Long sellerId;
-
-    @NotNull(message = "카테고리 ID는 필수입니다.")
-    private Long categoryId;
     
     private DiscountDTO discount;
     
     // 엔티티 변환
-    public Product toEntity(Seller seller, Category category) {
+    public Product toEntity() {
         Product product = Product.builder()
                 .title(this.title)
                 .description(this.description)
@@ -59,8 +51,6 @@ public class ProductRequestDTO {
                 .price(this.price)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
-                .seller(seller)
-                .category(category)
                 .build();
         
         // 할인 엔티티로 변환

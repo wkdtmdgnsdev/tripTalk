@@ -7,17 +7,20 @@ import org.springframework.data.domain.Sort;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageRequestDTO {
 	
-	private int page = 1;
-	private int size = 10;
+	private Integer page = 1;
+	private Integer size = 10;
 	private String sort = "id,desc";
 	
 	public Pageable toPageable() {
+		int safePage = Math.max(0, page -1);
 		if(sort == null || sort.isBlank())
 			return PageRequest.of(page -1, size);
 		
@@ -28,6 +31,6 @@ public class PageRequestDTO {
 							? Sort.Direction.fromString(sortParams[1])
 							: Sort.Direction.DESC;
 		
-		return PageRequest.of(page -1, size, Sort.by(direction, sortFiled));
+		return PageRequest.of(safePage, size, Sort.by(direction, sortFiled));
 	}
 }

@@ -81,9 +81,9 @@
 </div>
 
 
-    <div v-if="loading" class="loading">로딩 중...</div>
-    <div v-else>
-      <div v-if="products.length" class="product-list-wrapper">
+    <div v-if="loading" class="loading-overlay">로딩 중...</div>
+
+      <div v-show="products.length" class="product-list-wrapper">
         <div v-for="product in products" :key="product.id" class="product-item">
           <img :src="product.imageUrl || defaultImage" alt="썸네일" class="thumbnail" />
           <div class="info">
@@ -96,24 +96,28 @@
           </div>
         </div>
       </div>
-      <p v-else>검색 결과가 없습니다.</p>
-    </div>
+      <p v-show="!products.length">검색 결과가 없습니다.</p>
+    <div ref="scrollTrigger" style="height: 10px; visibility: hidden;"></div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import ko from 'date-fns/locale/ko'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
+const page = ref(0);
+const size = 10;
+const hasMore = ref(true);
+
 const route = useRoute()
 const router = useRouter()
 
 const searchValue = ref(route.query.searchValue || '')
-const sort = ref(route.query.sort || 'createdDate,desc')
+const sort = ref(route.query.sort || 'startDate,desc')
 const startDate = ref(route.query.startDate || '')
 const endDate = ref(route.query.endDate || '')
 const priceRange = ref([0, 500000])
@@ -153,7 +157,7 @@ const clearDate = () => {
 }
 
 const sortOptions = [
-  { label: '최신순', value: 'createdDate,desc' },
+  { label: '최신순', value: 'startDate,desc' },
   { label: '낮은 가격순', value: 'price,asc' },
   { label: '높은 가격순', value: 'price,desc' },
   { label: '할인 높은순', value: 'discount,desc' }
@@ -176,10 +180,15 @@ const loading = ref(false)
 const defaultImage = '/no-image.jpg'
 
 const fetchProducts = async () => {
+  if(!hasMore.value || loading.value) return
+
   loading.value = true
+
   try {
     const res = await axios.get('/api/product', {
       params: {
+        page: page.value,
+        size,
         searchKey: 'titleAndDescription',
         searchValue: searchValue.value,
         sort: sort.value,
@@ -189,7 +198,18 @@ const fetchProducts = async () => {
         maxPrice: priceRange.value[1],
       },
     })
-    products.value = res.data.content
+
+    const data = res.data;
+
+    if (page.value === 1 && data.content.length > 0)
+      products.value.splice(0, products.value.length, ...data.content) // 교체
+    else
+      products.value.push(...data.content); // 이어붙이기
+
+    hasMore.value = !data.last;
+
+    if (!data.last)
+      page.value += 1;
   } catch (e) {
     console.error(e)
   } finally {
@@ -198,7 +218,10 @@ const fetchProducts = async () => {
 }
 
 const handleSearch = () => {
-  router.push({
+  page.value = 1
+  hasMore.value = true
+
+  router.replace({
     query: {
       searchValue: searchValue.value,
       sort: sort.value,
@@ -206,9 +229,63 @@ const handleSearch = () => {
       endDate: endDate.value,
     },
   })
+
+  fetchProducts();
 }
 
-watch(() => route.query, fetchProducts, { immediate: true })
+const scrollTrigger = ref(null);
+let observer = null;
+
+onMounted(() => {
+  page.value = 1;
+  hasMore.value = true;
+
+  fetchProducts();
+
+  observer = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+
+    if(entry.isIntersecting && !loading.value && hasMore.value) {
+      observer.unobserve(entry.target) // 중복 방지
+
+      fetchProducts().then(() => {
+        if(scrollTrigger.value && hasMore.value)
+          observer.observe(scrollTrigger.value); // 다시 감지
+      })
+    }
+  }, {
+    threshold: 1
+  })
+
+  if(scrollTrigger.value)
+    observer.observe(scrollTrigger.value);
+})
+
+onUnmounted(() => {
+  if(observer && scrollTrigger.value)
+    observer.unobserve(scrollTrigger.value);
+})
+
+watch(
+  () => [searchValue.value, sort.value, startDate.value, endDate.value, priceRange.value[0], priceRange.value[1]],
+  () => {
+    handleSearch();
+  }
+)
+
+watch(
+  () => sort.value,
+  async (newSort) => {
+    await router.replace({
+      query: {
+        ...route.query,
+        sort: newSort,
+      },
+    })
+
+    router.go(0)
+  }
+)
 </script>
 
 <style scoped>
@@ -379,5 +456,21 @@ watch(() => route.query, fetchProducts, { immediate: true })
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.product-list-wrapper {
+  min-height: 400px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>

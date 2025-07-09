@@ -1,5 +1,13 @@
 <template>
   <div class="product-list">
+    <!-- 검색과 필터 고정 -->
+    <div
+    ref="wrapperRef"
+    class="search-filter-wrapper"
+    style="position: sticky; z-index: 999;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    background-color: #f8f8f8">
+
     <div class="top-bar">
       <div class="input-box">
         <span class="icon">🔍</span>
@@ -44,6 +52,7 @@
         가격: {{ priceRange[0].toLocaleString() }} ~ {{ priceRange[1].toLocaleString() }}원
       </button>
       <button class="pill-btn">호텔성급</button>
+    </div>
     </div>
 
     <!-- 정렬 모달 -->
@@ -127,6 +136,14 @@ const openDateModal = ref(false)
 const today = new Date()
 const tomorrow = new Date()
 tomorrow.setDate(today.getDate() + 1)
+
+window.addEventListener('resize', () => {
+  const header = document.querySelector('.header-wrapper')
+  if (header && wrapperRef.value) {
+    const headerHeight = header.offsetHeight
+    wrapperRef.value.style.top = `${headerHeight}px`
+  }
+})
 
 const dateRange = ref([
   new Date(startDate.value || today),
@@ -235,6 +252,7 @@ const handleSearch = () => {
 
 const scrollTrigger = ref(null);
 let observer = null;
+const wrapperRef = ref(null);
 
 onMounted(() => {
   page.value = 1;
@@ -259,6 +277,12 @@ onMounted(() => {
 
   if(scrollTrigger.value)
     observer.observe(scrollTrigger.value);
+
+  const header = document.querySelector('.header-wrapper')
+  if (header && wrapperRef.value) {
+    const headerHeight = header.offsetHeight
+    wrapperRef.value.style.top = `${headerHeight}px`
+  }
 })
 
 onUnmounted(() => {
